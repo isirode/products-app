@@ -18,3 +18,6 @@ The project is composed of multiple sub-modules:
 * [web](web/README.md) : contains the site web displaying the data
 * [deploy](deploy/README.md) : contains a system allowing to deploy the web application to a VPS
 
+## Data
+
+The data is available in this [Github repository (isirode/produts-data)](https://github.com/isirode/products-data).
