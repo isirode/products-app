@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  api:
+    image: "${PRODUCTS_API_IMAGE_NAME}:0.0.1"
+    ports: # TODO : Intellij say it is not valid
+      - "7000:${API_PORT}"
+    # TODO : use healthcheck dependency https://docs.docker.com/compose/compose-file/#depends_on
+    # https://docs.docker.com/compose/compose-file/#healthcheck
+    # Check hostname, container_name
+    environment:
+      - CONFIGURATION_FILENAME
+    volumes:
+      - type: bind
+        source: ./config/api.dev.conf
+        # Info : I am using the same filepath as for a podman secret
+        target: /run/secrets/configuration
+        read_only: true
+    links:
+      - orientdb
+    depends_on:
+      - orientdb
+    restart: # TODO : checkout restart
+      on-failure
+  orientdb:
+    image: "orientdb:3.2.5"
+    ports:
+      - "2480:2480"
+    expose:
+      - "2424"
+    environment:
+      - ORIENTDB_ROOT_PASSWORD
+    restart:
+      on-failure

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: products-app
+spec:
+  containers:
+    - name: orientdb
+      image: docker.io/library/orientdb:3.2.5
+      ports:
+        - containerPort: 2424
+        - containerPort: 2480
+      env:
+        - name: ORIENTDB_ROOT_PASSWORD
+          value: "${ORIENTDB_ROOT_PASSWORD}"
+    - name: products-web
+      image: your.registry:5000/products-web:0.0.1
+      ports:
+        - name: web
+          hostPort: 7080
+          containerPort: 80
+    - name: products-api
+      image: your.registry:5000/products-api:0.0.1
+      ports:
+        - name: api
+          hostPort: 7000
+          containerPort: 7000
+      env:
+        - name: CONFIGURATION_FILENAME
+          value: "/run/secrets/configuration"
+      volumeMounts:
+        - mountPath: /run/secrets/configuration
+          name: secret-volume
+  # Not using podman 3.1 still
+  volumes:
+    - name: secret-volume
+      hostPath:
+        path: products/secrets/secret-configuration.dev.conf
+        type: File
+      accessModes:
+        - ReadOnly

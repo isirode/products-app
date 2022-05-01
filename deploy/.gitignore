@@ -1,0 +1,5 @@
+secret/secret-configuration.api.dev.conf
+src/main/resources/local.conf
+nginx/products-api-nginx.conf
+nginx/products-web-nginx.conf
+pod/products-app.pod.yml
